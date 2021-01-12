@@ -1,23 +1,21 @@
-import logo from './logo.svg';
+import {useState, useEffect} from 'react';
 import './App.css';
+import axios from "axios";
 
+const convertedKey = process.env.REACT_APP_NOMIC_KEY;
 function App() {
+  const [state, setState] = useState([])
+  useEffect(() => {
+    axios
+      .get(`https://api.nomics.com/v1/currencies/ticker?key=${convertedKey}&ids=BTC&convert=CAD`)
+      .then(res => setState(res.data))
+    console.log(state);
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>hello</h1>
+      {state.length !== 0 && <h2>Bitcoin price at {state[0].price_timestamp} is {state[0].price} CAD</h2>}
     </div>
   );
 }
